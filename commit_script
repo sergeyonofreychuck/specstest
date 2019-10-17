@@ -1,0 +1,3 @@
+git add .
+git commit -m "since version set to $nxrm_version"
+echo Commit to the release branch OK: $GIT_COMMIT
