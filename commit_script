@@ -1,4 +1,3 @@
-git checkout $GIT_BRANCH
-git add .
-git commit -am "since version set to $nxrm_version"
-echo Commit to the release branch OK: $GIT_COMMIT
+echo XXXX $GIT_LOCAL_BRANCH
+echo XXXX $GIT_BRANCH
+echo XXXX $release_branch
