@@ -5,6 +5,8 @@ node {
     println "release branch: ${params.release_branch}"
     println "tracking_branch: ${params.tracking_branch}"
 
+    checkout scm
+
     sh "git checkout ${params.release_branch}"
 
     sh "git checkout -b jenkins_work"
