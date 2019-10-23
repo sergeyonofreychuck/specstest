@@ -10,13 +10,13 @@ node {
     sh "git checkout -b jenkins_work"
 
     def versionUpdater = load "update-since-version.groovy"
-    if (!versionUpdater.updateVersion(params.nxrm_version) {
+    if (!versionUpdater.updateVersion(params.nxrm_version)) {
       throw new RuntimeException("Version update failed")
     }
 
     sh "git commit -m \"updated source version to ${params.nxrm_version}\""
   }
-  
+
   stage ("push_release") {
     commitAndPushToExistingBranch(params.release_branch)
   }
