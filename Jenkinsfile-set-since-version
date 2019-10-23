@@ -9,6 +9,8 @@ node {
 
     sh "git checkout ${params.release_branch}"
 
+    sh "git branch -d jenkins_work"
+    sh "git branch -d jenkins_work"
     sh "git checkout -b jenkins_work"
 
     def versionUpdater = load 'update-since-version.groovy'
