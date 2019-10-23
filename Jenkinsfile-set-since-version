@@ -12,6 +12,10 @@ node {
 
     sh "git checkout -b jenkins_work"
 
+    def test1 = load 'test1.groovy'
+
+    test1.test1()
+
     def versionUpdater = load 'update-since-version.groovy'
 
     println versionUpdater
