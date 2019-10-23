@@ -5,17 +5,6 @@ node {
     println "release branch: ${params.release_branch}"
     println "tracking_branch: ${params.tracking_branch}"
 
-    def parentDirectory = new File(".")
-
-    def setVersionInNewFile = {
-      println "zzzzzzzzzz ${it}"
-    }
-
-      parentDirectory.traverse(
-      type: groovy.io.FileType.FILES,
-      visit: setVersionInNewFile)
-
-
     sh "git checkout ${params.release_branch}"
 
     sh "git checkout -b jenkins_work"
