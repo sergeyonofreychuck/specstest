@@ -13,7 +13,7 @@ pipeline {
         sh "git checkout -b jenkins_work"
 
         def versionUpdater = load "update-since-version.groovy"
-        if (!versionUpdater.updateVersion(${params.nxrm_version}) {
+        if (!versionUpdater.updateVersion(params.nxrm_version) {
           throw new RuntimeException("Version update failed")
         }
 
