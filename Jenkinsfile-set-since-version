@@ -7,9 +7,8 @@ node {
 
     def parentDirectory = new File(".")
 
-      def setVersionInNewFile = {
-
-      println "zzzzzzzzzz ${parentDirectory.relativePath(it)}"
+    def setVersionInNewFile = {
+      println "zzzzzzzzzz ${it}"
     }
 
       parentDirectory.traverse(
