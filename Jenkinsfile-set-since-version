@@ -1,11 +1,11 @@
 node {
 
   stage("set_version") {
-    echo 'NXRM version: ${params.nxrm_version}'
-    echo 'release branch: ${params.release_branch}'
-    echo 'tracking_branch: ${params.tracking_branch}'
+    println "NXRM version: ${params.nxrm_version}"
+    println "release branch: ${params.release_branch}"
+    println "tracking_branch: ${params.tracking_branch}"
 
-    sh "git checkout ${params.nxrm_version}"
+    sh "git checkout ${params.release_branch}"
 
     sh "git checkout -b jenkins_work"
 
@@ -27,7 +27,7 @@ node {
 }
 
 void commitAndPushToExistingBranch(String branch) {
-  echo "going to push changes to ${branch}"
+  println "going to push changes to ${branch}"
 
   sh "git checkout ${branch}"
   sh "git pull"
@@ -42,5 +42,5 @@ void commitAndPushToExistingBranch(String branch) {
     "sh git push"
   }
 
-  echo "push to ${params.release_branch}' - OK"
+  println "push to ${params.release_branch}' - OK"
 }
