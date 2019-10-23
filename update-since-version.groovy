@@ -21,34 +21,37 @@ FILTER_FOLDERS_EXCLUDED = /^\..*|^target$|^node_modules$/
 
 VERSION_CHECK = /^(\d+\.)?(\d+\.)?(\*|\d+)$/
 
-def version = System.getenv('nxrm_version') ?: args.length > 0 ? args[0] : null
+def updateVersion(String version) {
 
-if (!(version ==~ VERSION_CHECK)) {
-  System.err.println "Invalid version provided. \'${version}\'. Set environment variable nxrm_version " +
-      "or use the first command line argument"
-  System.exit(1)
-}
-
-println "The version to apply: ${version}"
-
-def parentDirectory = new File(".")
-
-def setVersionInNewFile = {
-  def content = it.text
-
-  if (content.contains(EMPTY_VERSION_TERM)) {
-    println "Applying the version to ${parentDirectory.relativePath(it)}"
-    it.write(content.replaceAll(EMPTY_VERSION_REPLACE_REGEXP, "@since ${version}"))
+  if (!(version ==~ VERSION_CHECK)) {
+    System.err.println "Invalid version provided. \'${version}\'. Set environment variable nxrm_version " +
+        "or use the first command line argument"
+    return false
   }
-}
 
-def foldersFilter = {
-  return parentDirectory.relativePath(it) ==~ FILTER_FOLDERS_EXCLUDED
-      ? FileVisitResult.SKIP_SUBTREE : FileVisitResult.CONTINUE
-}
+  println "The version to apply: ${version}"
 
-parentDirectory.traverse(
-    type: groovy.io.FileType.FILES,
-    visit: setVersionInNewFile,
-    excludeNameFilter: FILTER_FILES_EXCLUDED,
-    preDir: foldersFilter)
+  def parentDirectory = new File(".")
+
+  def setVersionInNewFile = {
+    def content = it.text
+
+    if (content.contains(EMPTY_VERSION_TERM)) {
+      println "Applying the version to ${parentDirectory.relativePath(it)}"
+      it.write(content.replaceAll(EMPTY_VERSION_REPLACE_REGEXP, "@since ${version}"))
+    }
+  }
+
+  def foldersFilter = {
+    return parentDirectory.relativePath(it) ==~ FILTER_FOLDERS_EXCLUDED
+        ? FileVisitResult.SKIP_SUBTREE : FileVisitResult.CONTINUE
+  }
+
+  parentDirectory.traverse(
+      type: groovy.io.FileType.FILES,
+      visit: setVersionInNewFile,
+      excludeNameFilter: FILTER_FILES_EXCLUDED,
+      preDir: foldersFilter)
+
+  return true
+}

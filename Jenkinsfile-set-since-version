@@ -1,0 +1,54 @@
+pipeline {
+  agent any
+
+  stages {
+    stage("set_version") {
+      steps {
+        echo 'NXRM version: ${params.nxrm_version}'
+        echo 'release branch: ${params.release_branch}'
+        echo 'tracking_branch: ${params.tracking_branch}'
+
+        sh git checkout ${params.nxrm_version}
+
+        sh git checkout -b jenkins_work
+
+        def versionUpdater = load "update-since-version.groovy"
+        if (!versionUpdater.updateVersion(${params.nxrm_version}) {
+          throw new RuntimeException("Version update failed")
+        }
+
+        sh git commit -m "updated source version to ${params.nxrm_version}"
+      }
+    }
+    stage ("push_release") {
+      steps {
+        commitAndPushToExistingBranch(params.release_branch)
+      }
+    }
+
+    stage ("push_tracking") {
+      steps {
+        commitAndPushToExistingBranch(params.tracking_branch)
+      }
+    }
+  }
+}
+
+void commitAndPushToExistingBranch(String branch) {
+  echo "going to push changes to ${branch}"
+
+  sh git checkout ${branch}
+  sh git pull
+  sh git cherry-pick jenkins_work
+
+  try {
+    sh git push
+  } catch (Exception e) {
+    sh git reset --hard
+    sh git pull
+    sh git cherry-pick jenkins_work
+    sh git push
+  }
+
+  echo "push to ${params.release_branch}' - OK"
+}
