@@ -48,7 +48,6 @@ def updateVersion(String version) {
   // }
 
   parentDirectory.traverse(
-      type: groovy.io.FileType.FILES,
       visit: setVersionInNewFile,
       excludeNameFilter: FILTER_FILES_EXCLUDED)
 
