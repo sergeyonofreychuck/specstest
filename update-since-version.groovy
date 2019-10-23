@@ -37,21 +37,20 @@ def updateVersion(String version) {
     def content = it.text
 
     if (content.contains(EMPTY_VERSION_TERM)) {
-      println "Applying the version to ${parentDirectory.relativePath(it)}"
+      //println "Applying the version to ${parentDirectory.relativePath(it)}"
       it.write(content.replaceAll(EMPTY_VERSION_REPLACE_REGEXP, "@since ${version}"))
     }
   }
 
-  def foldersFilter = {
-    return parentDirectory.relativePath(it) ==~ FILTER_FOLDERS_EXCLUDED
-        ? FileVisitResult.SKIP_SUBTREE : FileVisitResult.CONTINUE
-  }
+  // def foldersFilter = {
+  //   return parentDirectory.relativePath(it) ==~ FILTER_FOLDERS_EXCLUDED
+  //       ? FileVisitResult.SKIP_SUBTREE : FileVisitResult.CONTINUE
+  // }
 
   parentDirectory.traverse(
       type: groovy.io.FileType.FILES,
       visit: setVersionInNewFile,
-      excludeNameFilter: FILTER_FILES_EXCLUDED,
-      preDir: foldersFilter)
+      excludeNameFilter: FILTER_FILES_EXCLUDED)
 
   return true
 }
