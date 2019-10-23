@@ -11,7 +11,6 @@ node {
 
       println "zzzzzzzzzz ${parentDirectory.relativePath(it)}"
     }
-  }
 
       parentDirectory.traverse(
       type: groovy.io.FileType.FILES,
