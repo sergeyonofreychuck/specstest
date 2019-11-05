@@ -24,6 +24,7 @@ node {
 
       runSafely "git config user.email 'sonatype-zion@sonatype.com'"
       runSafely "git config user.name 'Sonatype Zion'"
+      runSafely "git config --global push.default simple"
 
       runSafely "git add ."
 
