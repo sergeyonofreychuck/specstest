@@ -20,7 +20,8 @@ node {
     }
 
     runSafely "git commit -m \"updated source version to ${params.nxrm_version}\""
-
+  }
+  
   stage("push_release") {
     commitAndPushToExistingBranch(params.release_branch)
   }
