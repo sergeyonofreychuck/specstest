@@ -21,10 +21,17 @@ node {
 
     println "commit to working branch"
 
-    withConfiguredGit(() -> {
-      println "xxxxxx kkkkkkkkk"
-      runSafely "git commit -m \"updated source version to ${params.nxrm_version}\""    
-    })
+    withCredentials([sshUserPrivateKey(credentialsId: sonatypeZionCredentialsId(), keyFileVariable: 'KEY_PATH')]) {
+      println "zzz withCredentials"
+      runSafely "git config user.email 'sonatype-zion@sonatype.com'"
+      runSafely "git config user.name 'Sonatype Zion'"
+
+      println "zzz start commit"
+
+      runSafely "git commit -m \"updated source version to ${params.nxrm_version}\""
+
+      println "zzz commit OK"
+    }
   }
 
   stage("push_release") {
@@ -38,17 +45,6 @@ node {
       commitAndPushToExistingBranch(params.tracking_branch)
     }
   }
-}
-
-def withConfiguredGit(closure) {
-    withCredentials([sshUserPrivateKey(credentialsId: sonatypeZionCredentialsId(), keyFileVariable: 'KEY_PATH', usernameVariable: 'USER')]) {
-      println "xxxxxx username: " + USER
-
-      git config --global user.email "test@example.com"
-      git config --global user.name "${USER}"
-
-      closure()
-    }  
 }
 
 void commitAndPushToExistingBranch(String branch) {
