@@ -51,3 +51,5 @@ parentDirectory.traverse(
     visit: setVersionInNewFile,
     excludeNameFilter: FILTER_FILES_EXCLUDED,
     preDir: foldersFilter)
+
+println "files update OK"
