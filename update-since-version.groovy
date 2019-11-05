@@ -37,7 +37,7 @@ def updateVersion(String version) {
     def content = it.text
 
     if (content.contains(EMPTY_VERSION_TERM)) {
-      //println "Applying the version to ${parentDirectory.relativePath(it)}"
+      println "Applying the version to ${parentDirectory.relativePath(it)}"
       it.write(content.replaceAll(EMPTY_VERSION_REPLACE_REGEXP, "@since ${version}"))
     }
   }
@@ -53,5 +53,3 @@ def updateVersion(String version) {
 
   return true
 }
-
-return this
