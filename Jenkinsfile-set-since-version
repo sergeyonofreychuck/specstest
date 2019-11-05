@@ -20,7 +20,7 @@ node {
   }
 
   stage("git_publish") {
-    sshagent (credentials: sonatypeZionCredentialsId()) {
+    sshagent (credentials: [sonatypeZionCredentialsId()]) {
 
       runSafely "git config user.email 'sonatype-zion@sonatype.com'"
       runSafely "git config user.name 'Sonatype Zion'"
