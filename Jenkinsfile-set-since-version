@@ -17,6 +17,10 @@ node {
 
     String versionUpdater = "update-since-version.groovy"
 
+    def result = runGroovy(versionUpdater, params.nxrm_version)
+
+    println ("zzzz result" + result)
+
     if (runGroovy(versionUpdater, params.nxrm_version) != 0) {
       println "zzzz throwing runtime"
       throw new RuntimeException("Version update failed")
