@@ -51,7 +51,7 @@ void commitAndPushToExistingBranch(String branch) {
   } catch (Exception e) {
     println "push to ${branch}' failed, trying the secont attempt"
 
-    runSafely "git reset --hard"
+    runSafely "git reset --hard origin/${branch}"
     runSafely "git pull"
     runSafely "git cherry-pick jenkins_work"
     runSafely "git push"
