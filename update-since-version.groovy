@@ -43,7 +43,7 @@ def setVersionInNewFile = {
 }
 
 def foldersFilter = {
-  return parentDirectory.relativePath(it) ==~ FILTER_FOLDERS_EXCLUDED ? FileVisitResult.SKIP_SUBTREE : FileVisitResult.CONTINUE
+  return it.name ==~ FILTER_FOLDERS_EXCLUDED ? FileVisitResult.SKIP_SUBTREE : FileVisitResult.CONTINUE
 }
 
 parentDirectory.traverse(
