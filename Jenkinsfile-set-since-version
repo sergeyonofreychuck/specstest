@@ -17,15 +17,13 @@ node {
 
     String versionUpdater = "update-since-version.groovy"
 
-    println "zzzz " + versionUpdater
-
-    runGroovy(versionUpdater, params.nxrm_version)
-
-    if (!runGroovy(versionUpdater, params.nxrm_version)) {
+    if (runGroovy(versionUpdater, params.nxrm_version) != 0) {
       println "zzzz throwing runtime"
       throw new RuntimeException("Version update failed")
     }
+    println "files update OK"
 
+    println "commit to working branch"
     runSafely "git commit -m \"updated source version to ${params.nxrm_version}\""
   }
 

@@ -16,7 +16,7 @@ import groovy.io.FileVisitResult
 EMPTY_VERSION_TERM = "@since 3.next"
 EMPTY_VERSION_REPLACE_REGEXP = /@since \d+\.next/
 
-FILTER_FILES_EXCLUDED = /Jenkins-set-since-version/
+FILTER_FILES_EXCLUDED = /update-since-version.groovy/
 FILTER_FOLDERS_EXCLUDED = /^\..*|^target$|^node_modules$/
 
 VERSION_CHECK = /^(\d+\.)?(\d+\.)?(\*|\d+)$/
