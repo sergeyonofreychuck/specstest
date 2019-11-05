@@ -1,8 +1,7 @@
 library('jenkins-shared')
 
 node {  
-
-  stage("set_version") {
+  stage("prepare_sources") {
 
     println "NXRM version: ${params.nxrm_version}"
     println "release branch: ${params.release_branch}"
@@ -14,34 +13,26 @@ node {
     runSafely "git checkout ${params.release_branch}"
 
     runSafely "git checkout -b jenkins_work"
+  }
 
-    String versionUpdater = "update-since-version.groovy"
+  stage("set_version") {
+    runGroovy("update-since-version.groovy", params.nxrm_version)
+  }
 
-    runGroovy(versionUpdater, params.nxrm_version)
+  stage("git_publish") {
+    sshagent (credentials: sonatypeZionCredentialsId()) {
 
-    println "commit to working branch"
-
-    withCredentials([sshUserPrivateKey(credentialsId: sonatypeZionCredentialsId(), keyFileVariable: 'KEY_PATH')]) {
-      println "zzz withCredentials"
       runSafely "git config user.email 'sonatype-zion@sonatype.com'"
       runSafely "git config user.name 'Sonatype Zion'"
 
-      println "zzz start commit"
+      runSafely "git add ."
 
-      runSafely "git commit -m \"updated source version to ${params.nxrm_version}\""
+      println "commit to \"jenkins_work\" branch"
 
-      println "zzz commit OK"
-    }
-  }
+      runSafely "git commit -m \"updated new sources version to ${params.nxrm_version}\""
 
-  stage("push_release") {
-    withCredentials([sshUserPrivateKey(credentialsId: sonatypeZionCredentialsId(), keyFileVariable: 'KEY_PATH')]) {
       commitAndPushToExistingBranch(params.release_branch)
-    }
-  }
 
-  stage("push_tracking") {
-    withCredentials([sshUserPrivateKey(credentialsId: sonatypeZionCredentialsId(), keyFileVariable: 'KEY_PATH')]) {
       commitAndPushToExistingBranch(params.tracking_branch)
     }
   }
@@ -57,6 +48,8 @@ void commitAndPushToExistingBranch(String branch) {
   try {
     runSafely "git push"
   } catch (Exception e) {
+    println "push to ${branch}' failed, trying the secont attempt"
+
     runSafely "git reset --hard"
     runSafely "git pull"
     runSafely "git cherry-pick jenkins_work"
