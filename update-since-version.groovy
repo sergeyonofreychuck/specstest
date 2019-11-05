@@ -21,35 +21,32 @@ FILTER_FOLDERS_EXCLUDED = /^\..*|^target$|^node_modules$/
 
 VERSION_CHECK = /^(\d+\.)?(\d+\.)?(\*|\d+)$/
 
-def call(String version) {
+def version = args[0]
 
-  if (!(version ==~ VERSION_CHECK)) {
-    System.err.println "Invalid version provided. \'${version}\'. Set environment variable nxrm_version " +
-        "or use the first command line argument"
-    return false
-  }
-
-  println "The version to apply: ${version}"
-
-  def parentDirectory = new File(".")
-
-  def setVersionInNewFile = {
-    def content = it.text
-
-    if (content.contains(EMPTY_VERSION_TERM)) {
-      println "Applying the version to ${parentDirectory.relativePath(it)}"
-      it.write(content.replaceAll(EMPTY_VERSION_REPLACE_REGEXP, "@since ${version}"))
-    }
-  }
-
-  // def foldersFilter = {
-  //   return parentDirectory.relativePath(it) ==~ FILTER_FOLDERS_EXCLUDED
-  //       ? FileVisitResult.SKIP_SUBTREE : FileVisitResult.CONTINUE
-  // }
-
-  parentDirectory.traverse(
-      visit: setVersionInNewFile,
-      excludeNameFilter: FILTER_FILES_EXCLUDED)
-
-  return true
+if (!(version ==~ VERSION_CHECK)) {
+  System.err.println "Invalid version provided. \'${version}\'. Set environment variable nxrm_version " +
+      "or use the first command line argument"
+  System.exit(1)
 }
+
+println "The version to apply: ${version}"
+
+def parentDirectory = new File(".")
+
+def setVersionInNewFile = {
+  def content = it.text
+
+  if (content.contains(EMPTY_VERSION_TERM)) {
+    println "Applying the version to ${parentDirectory.relativePath(it)}"
+    it.write(content.replaceAll(EMPTY_VERSION_REPLACE_REGEXP, "@since ${version}"))
+  }
+}
+
+// def foldersFilter = {
+//   return parentDirectory.relativePath(it) ==~ FILTER_FOLDERS_EXCLUDED
+//       ? FileVisitResult.SKIP_SUBTREE : FileVisitResult.CONTINUE
+// }
+
+parentDirectory.traverse(
+    visit: setVersionInNewFile,
+    excludeNameFilter: FILTER_FILES_EXCLUDED)
