@@ -1,3 +1,5 @@
+library('jenkins-shared')
+
 node {  
 
   stage("set_version") {
@@ -9,9 +11,9 @@ node {
     deleteDir()
     checkout scm
 
-    //runSafely "git checkout ${params.release_branch}"
+    runSafely "git checkout ${params.release_branch}"
 
-    //runSafely "git checkout -b jenkins_work"
+    runSafely "git checkout -b jenkins_work"
 
     String versionUpdater = "update-since-version.groovy"
 
