@@ -24,8 +24,7 @@ VERSION_CHECK = /^(\d+\.)?(\d+\.)?(\*|\d+)$/
 def version = args[0]
 
 if (!(version ==~ VERSION_CHECK)) {
-  System.err.println "Invalid version provided. \'${version}\'. Set environment variable nxrm_version " +
-      "or use the first command line argument"
+  System.err.println "Invalid version provided. \'${version}\'. Use a first command line argument to provide the version"
   System.exit(1)
 }
 
