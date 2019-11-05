@@ -19,6 +19,8 @@ node {
 
     println "zzzz " + versionUpdater
 
+    runGroovy(versionUpdater, params.nxrm_version)
+
     if (!runGroovy(versionUpdater, params.nxrm_version)) {
       println "zzzz throwing runtime"
       throw new RuntimeException("Version update failed")

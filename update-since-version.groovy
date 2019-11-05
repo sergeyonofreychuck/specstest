@@ -21,7 +21,7 @@ FILTER_FOLDERS_EXCLUDED = /^\..*|^target$|^node_modules$/
 
 VERSION_CHECK = /^(\d+\.)?(\d+\.)?(\*|\d+)$/
 
-def updateVersion(String version) {
+def call((String version) {
 
   if (!(version ==~ VERSION_CHECK)) {
     System.err.println "Invalid version provided. \'${version}\'. Set environment variable nxrm_version " +
@@ -53,5 +53,3 @@ def updateVersion(String version) {
 
   return true
 }
-
-return this
