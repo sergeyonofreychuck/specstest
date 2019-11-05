@@ -42,11 +42,13 @@ def setVersionInNewFile = {
   }
 }
 
-// def foldersFilter = {
-//   return parentDirectory.relativePath(it) ==~ FILTER_FOLDERS_EXCLUDED
-//       ? FileVisitResult.SKIP_SUBTREE : FileVisitResult.CONTINUE
-// }
+def foldersFilter = {
+  return parentDirectory.relativePath(it) ==~ FILTER_FOLDERS_EXCLUDED
+      ? FileVisitResult.SKIP_SUBTREE : FileVisitResult.CONTINUE
+}
 
 parentDirectory.traverse(
+    type: groovy.io.FileType.FILES,
     visit: setVersionInNewFile,
-    excludeNameFilter: FILTER_FILES_EXCLUDED)
+    excludeNameFilter: FILTER_FILES_EXCLUDED,
+    preDir: foldersFilter)
