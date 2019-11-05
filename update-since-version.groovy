@@ -53,3 +53,5 @@ def updateVersion(String version) {
 
   return true
 }
+
+return this
