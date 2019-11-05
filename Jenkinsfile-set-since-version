@@ -21,15 +21,22 @@ node {
 
     println "commit to working branch"
 
-    runSafely "git commit -m \"updated source version to ${params.nxrm_version}\""
+    withCredentials([sshUserPrivateKey(credentialsId: sonatypeZionCredentialsId(), keyFileVariable: 'KEY_PATH')]) {
+      println "xxxxxx"
+      runSafely "git commit -m \"updated source version to ${params.nxrm_version}\""
+    }
   }
 
   stage("push_release") {
-    commitAndPushToExistingBranch(params.release_branch)
+    withCredentials([sshUserPrivateKey(credentialsId: sonatypeZionCredentialsId(), keyFileVariable: 'KEY_PATH')]) {
+      commitAndPushToExistingBranch(params.release_branch)
+    }
   }
 
   stage("push_tracking") {
-    commitAndPushToExistingBranch(params.tracking_branch)
+    withCredentials([sshUserPrivateKey(credentialsId: sonatypeZionCredentialsId(), keyFileVariable: 'KEY_PATH')]) {
+      commitAndPushToExistingBranch(params.tracking_branch)
+    }
   }
 }
 
